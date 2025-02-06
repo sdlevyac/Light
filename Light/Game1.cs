@@ -149,8 +149,27 @@ namespace Light
                 Primitives2D.DrawCircle(_spriteBatch, new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),25,25,Color.White);
             }
 
-
-
+            Vector2 dir = new Vector2(1, 1);
+            Vector2 pos = new Vector2(mouseStateCurrent.X / pixelWidth, mouseStateCurrent.Y / pixelWidth);
+            bool hit = false;
+            int dim = 0;
+            while (!hit)
+            {
+                if (dim == 0)
+                {
+                    pos += new Vector2(0, dir.Y);
+                }
+                else
+                {
+                    pos += new Vector2(dir.X, 0);
+                }
+                if (grid_space[(int)pos.X, (int)pos.Y] == 1)
+                {
+                    hit = true;
+                }
+                dim = (dim + 1) % 2;
+            }
+            _spriteBatch.DrawLine(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), new Vector2(pos.X * pixelWidth, pos.Y * pixelWidth), Color.Green);
             //_spriteBatch.Draw(rect, new Rectangle(mouseStateCurrent.X, mouseStateCurrent.Y, pixelWidth*2, pixelWidth*2), new Color(0, 0, 255));
             _spriteBatch.End();
             // TODO: Add your drawing code here
