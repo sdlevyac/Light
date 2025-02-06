@@ -15,8 +15,8 @@ namespace Light
         private int[,] grid_space;
         private int[,] grid_light;
         private int[,] grid_noise;
-        private int height = 100;
-        private int width = 160;
+        private int height = 200;
+        private int width = 250;
         private Random rnd;
 
         private static Texture2D rect;
@@ -40,7 +40,7 @@ namespace Light
             grid_light = new int[width, height];
             grid_noise = new int[width, height];
             rnd = new Random(1234);
-            pixelWidth = 8;
+            pixelWidth = 4;
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
@@ -49,7 +49,7 @@ namespace Light
                     {
                         grid_space[i, j] = 1;
                     }
-                    
+
                     grid_noise[i, j] = rnd.Next(10,50);
                 }
             }
@@ -98,6 +98,8 @@ namespace Light
 
             }
 
+            grid_light = Processing.diffuse(grid_light, 5);
+
             //Debug.WriteLine($"{mouseStateCurrent.X},{mouseStateCurrent.Y}");
             // TODO: Add your update logic here
 
@@ -124,7 +126,7 @@ namespace Light
                     }
                     else if (wall == 1)
                     {
-                        _spriteBatch.Draw(rect, new Rectangle(i * pixelWidth, j * pixelWidth, pixelWidth, pixelWidth), new Color(255, 0, 0));
+                        _spriteBatch.Draw(rect, new Rectangle(i * pixelWidth, j * pixelWidth, pixelWidth, pixelWidth), new Color(255 - grid_noise[i,j], 0, 0));
                     }
                     else
                     {
@@ -144,47 +146,7 @@ namespace Light
             }
             if (Utils.MouseOnScreen(mouseStateCurrent, width * pixelWidth, height * pixelWidth))
             {
-                Vector2 mousePos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                Vector2 oldMousePos = new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y);
-                Primitives2D.DrawLine(_spriteBatch, mousePos, oldMousePos, Color.Blue, 5);
-                //Primitives2D.DrawLine(_spriteBatch, mousePos, new Vector2(0, 0), Color.Blue, 5);
-                //Primitives2D.DrawLine(_spriteBatch, mousePos, new Vector2(0, height * pixelWidth), Color.Blue, 5);
-                //Primitives2D.DrawLine(_spriteBatch, mousePos, new Vector2(width * pixelWidth, 0), Color.Blue, 5);
-                //Primitives2D.DrawLine(_spriteBatch, mousePos, new Vector2(width * pixelWidth, height * pixelWidth), Color.Blue, 5);
-                //draw line left
-                Vector2 pos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                int count = 0;
-                while (pos.X >= 0 && pos.X < width * pixelWidth && pos.Y >= 0 && pos.Y < height * pixelWidth && grid_space[(int)(pos.X / pixelWidth), (int)(pos.Y / pixelWidth)] != 1)
-                {
-                    count++;
-                    pos.X = mousePos.X - (count * pixelWidth * 0.5f);
-                    pos.Y = mousePos.Y - (count * pixelWidth * 0.5f);
-                }
-                Primitives2D.DrawLine(_spriteBatch, mousePos, pos, Color.Green);
-                pos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                while (pos.X >= 0 && pos.X < width * pixelWidth && pos.Y >= 0 && pos.Y < height * pixelWidth && grid_space[(int)(pos.X / pixelWidth), (int)(pos.Y / pixelWidth)] != 1)
-                {
-                    pos.X += pixelWidth;
-                }
-                Primitives2D.DrawLine(_spriteBatch, mousePos, pos, Color.Green);
-                pos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                while (pos.X >= 0 && pos.X < width * pixelWidth && pos.Y >= 0 && pos.Y < height * pixelWidth && grid_space[(int)(pos.X / pixelWidth), (int)(pos.Y / pixelWidth)] != 1)
-                {
-                    pos.X -= pixelWidth;
-                }
-                Primitives2D.DrawLine(_spriteBatch, mousePos, pos, Color.Green);
-                pos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                while (pos.X >= 0 && pos.X < width * pixelWidth && pos.Y >= 0 && pos.Y < height * pixelWidth && grid_space[(int)(pos.X / pixelWidth), (int)(pos.Y / pixelWidth)] != 1)
-                {
-                    pos.Y -= pixelWidth;
-                }
-                Primitives2D.DrawLine(_spriteBatch, mousePos, pos, Color.Green);
-                pos = new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y);
-                while (pos.X >= 0 && pos.X < width * pixelWidth && pos.Y >= 0 && pos.Y < height * pixelWidth && grid_space[(int)(pos.X / pixelWidth), (int)(pos.Y / pixelWidth)] != 1)
-                {
-                    pos.Y += pixelWidth;
-                }
-                Primitives2D.DrawLine(_spriteBatch, mousePos, pos, Color.Green);
+                Primitives2D.DrawCircle(_spriteBatch, new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),25,25,Color.White);
             }
 
 
