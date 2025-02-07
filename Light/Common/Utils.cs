@@ -12,7 +12,7 @@ namespace Light
     {
         public static bool MouseOnScreen(MouseState m, int width, int height)
         {
-            Debug.WriteLine(m.X >= 0 && m.X < width && m.Y >= 0 && m.Y < height);
+            //Debug.WriteLine(m.X >= 0 && m.X < width && m.Y >= 0 && m.Y < height);
             return m.X >= 0 && m.X < width && m.Y >= 0 && m.Y < height;
         }
     }
