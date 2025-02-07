@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Light
 {
@@ -56,6 +57,42 @@ namespace Light
                 }
             }
             return buffer;
+        }
+        public static Vector2 ray(Vector2 pos, Vector2 dir, int width, int height, int[,] grid_space, int lifetime)
+        {
+            Vector2 startPos = new Vector2(pos.X, pos.Y);
+            bool hit = false;
+            int dim = 0;
+            int length = 0;
+            while (!hit)
+            {
+                if (dim == 0)
+                {
+                    pos += new Vector2(0, dir.Y);
+                }
+                else
+                {
+                    pos += new Vector2(dir.X, 0);
+                }
+                length++;
+                if (pos.X >= 0 && pos.X < width && pos.Y >= 0 && pos.Y < height)
+                {
+                    if (grid_space[(int)pos.X, (int)pos.Y] == 1)
+                    {
+                        hit = true;
+                    }
+                    if (Math.Sqrt(Math.Pow(pos.X - startPos.X, 2) + Math.Pow(pos.Y - startPos.Y, 2)) >= lifetime)
+                    {
+                        hit = true;
+                    }
+                    dim = (dim + 1) % 2;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return pos;
         }
     }
 }
