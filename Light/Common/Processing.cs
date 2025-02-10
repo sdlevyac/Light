@@ -58,7 +58,7 @@ namespace Light
             }
             return buffer;
         }
-        public static Vector2 ray(Vector2 pos, Vector2 dir, int width, int height, int[,] grid_space, int lifetime)
+        public static Vector2 ray(Vector2 pos, Vector2 dir, int width, int height, int[,] grid_space, int lifetime, ref int[,] grid_light)
         {
             Vector2 startPos = new Vector2(pos.X, pos.Y);
             bool hit = false;
@@ -77,11 +77,12 @@ namespace Light
                 length++;
                 if (pos.X >= 0 && pos.X < width && pos.Y >= 0 && pos.Y < height)
                 {
+                    grid_light[(int)pos.X, (int)pos.Y] = (int)(255 - (255 * (hyp(pos,startPos) / lifetime)));
                     if (grid_space[(int)pos.X, (int)pos.Y] == 1)
                     {
                         hit = true;
                     }
-                    if (Math.Sqrt(Math.Pow(pos.X - startPos.X, 2) + Math.Pow(pos.Y - startPos.Y, 2)) >= lifetime)
+                    if (hyp(pos,startPos) >= lifetime)
                     {
                         hit = true;
                     }
@@ -93,6 +94,14 @@ namespace Light
                 }
             }
             return pos;
+        }
+        public static float hyp(Vector2 a, Vector2 b)
+        {
+            return (float)Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2)); 
+        }
+        public static float manhattan(Vector2 a, Vector2 b)
+        {
+            return (Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y));
         }
     }
 }
