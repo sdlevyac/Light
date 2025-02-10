@@ -143,7 +143,7 @@ namespace Light
 
             mouseStateCurrent = new MouseState();
             mouseStatePrevious = new MouseState();
-            int rayCount = 3;
+            int rayCount = 30;
             for (int i = -rayCount; i < rayCount; i++)
             {
                 for (int j = -rayCount; j < rayCount; j++)
@@ -213,27 +213,43 @@ namespace Light
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
 
+            Vector2 startPos = new Vector2(mouseStateCurrent.X / pixelWidth, mouseStateCurrent.Y / pixelWidth);
+            foreach (Vector2 dir in rayDirs)
+            {
+                Vector2 pos = Processing.ray(startPos, dir, width, height, grid_space, 50, ref grid_light);
+                //_spriteBatch.DrawLine(startPos*pixelWidth + offset, pos*pixelWidth + offset, Color.Green);
+                //if (Processing.hyp(pos,startPos) < 50)
+                //{
+                //    Primitives2D.DrawCircle(_spriteBatch, pos * pixelWidth + offset, (Processing.hyp(pos, startPos) - 50) * pixelWidth, 20, Color.Green);
+                //}
+            }
+
             int[,] grid_light_diff = new int[width, height];
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    int neighbours = 0;
-                    int neighbourVals = 0;
-                    for (int di = -2; di <= 2; di++)
+                    if (grid_light[i,j] >= 0)
                     {
-                        for (int dj = -2; dj <= 2; dj++)
+                        int neighbours = 0;
+                        int neighbourVals = 0;
+                        int neighbourhood = 2;
+                        for (int di = -neighbourhood; di <= neighbourhood; di++)
                         {
-                            int ni = i + di, nj = j + dj;
-                            if (ni >= 0 && ni < width &&
-                                nj >= 0 && nj < height)
+                            for (int dj = -neighbourhood; dj <= neighbourhood; dj++)
                             {
-                                neighbours++;
-                                neighbourVals += grid_light[ni, nj];
+                                int ni = i + di, nj = j + dj;
+                                if (ni >= 0 && ni < width &&
+                                    nj >= 0 && nj < height)
+                                {
+                                    neighbours++;
+                                    neighbourVals += grid_light[ni, nj];
+                                }
                             }
                         }
+                        grid_light_diff[i, j] = neighbourVals / neighbours;
                     }
-                    grid_light_diff[i, j] = neighbourVals / neighbours;
+                    
                 }
             }
 
@@ -274,16 +290,7 @@ namespace Light
             }
 
             
-            Vector2 startPos = new Vector2(mouseStateCurrent.X / pixelWidth, mouseStateCurrent.Y / pixelWidth);
-            foreach (Vector2 dir in rayDirs)
-            {
-                Vector2 pos = Processing.ray(startPos, dir, width, height, grid_space, 50, ref grid_light);
-                //_spriteBatch.DrawLine(startPos*pixelWidth + offset, pos*pixelWidth + offset, Color.Green);
-                //if (Processing.hyp(pos,startPos) < 50)
-                //{
-                //    Primitives2D.DrawCircle(_spriteBatch, pos * pixelWidth + offset, (Processing.hyp(pos, startPos) - 50) * pixelWidth, 20, Color.Green);
-                //}
-            }
+
             
             //_spriteBatch.Draw(rect, new Rectangle(mouseStateCurrent.X, mouseStateCurrent.Y, pixelWidth*2, pixelWidth*2), new Color(0, 0, 255));
             _spriteBatch.End();
