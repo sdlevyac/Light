@@ -200,6 +200,31 @@ namespace Light
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
+
+            int[,] grid_light_diff = new int[width, height];
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    int neighbours = 0;
+                    int neighbourVals = 0;
+                    for (int di = -2; di <= 2; di++)
+                    {
+                        for (int dj = -2; dj <= 2; dj++)
+                        {
+                            int ni = i + di, nj = j + dj;
+                            if (ni >= 0 && ni < width &&
+                                nj >= 0 && nj < height)
+                            {
+                                neighbours++;
+                                neighbourVals += grid_light[ni, nj];
+                            }
+                        }
+                    }
+                    grid_light_diff[i, j] = neighbourVals / neighbours;
+                }
+            }
+
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
@@ -217,7 +242,7 @@ namespace Light
                     }
                     else
                     {
-                        int value = grid_light[i, j];
+                        int value = grid_light_diff[i, j];
                         int noise = grid_noise[i, j];
                         value += noise;
                         _spriteBatch.Draw(rect, new Rectangle(i * pixelWidth, j * pixelWidth, pixelWidth, pixelWidth), new Color(value, value, value));
