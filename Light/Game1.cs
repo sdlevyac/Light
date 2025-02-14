@@ -55,7 +55,7 @@ namespace Light
                         grid_space[i, j] = 1;
                     }
 
-                    grid_noise[i, j] = rnd.Next(10,50);
+                    grid_noise[i, j] = rnd.Next(1,10);
                 }
             }
 
@@ -157,33 +157,33 @@ namespace Light
 
             int[,] grid_light_diff = new int[width, height];
             grid_light_diff = grid_light;
-            for (int i = 0; i < width; i++)
-            {
-                for (int j = 0; j < height; j++)
-                {
-                    if (grid_light[i, j] >= 0)
-                    {
-                        int neighbours = 0;
-                        int neighbourVals = 0;
-                        int neighbourhood = 1;
-                        for (int di = -neighbourhood; di <= neighbourhood; di++)
-                        {
-                            for (int dj = -neighbourhood; dj <= neighbourhood; dj++)
-                            {
-                                int ni = i + di, nj = j + dj;
-                                if (ni >= 0 && ni < width &&
-                                    nj >= 0 && nj < height)
-                                {
-                                    neighbours++;
-                                    neighbourVals += grid_light[ni, nj];
-                                }
-                            }
-                        }
-                        grid_light_diff[i, j] = neighbourVals / neighbours;
-                    }
+            //for (int i = 0; i < width; i++)
+            //{
+            //    for (int j = 0; j < height; j++)
+            //    {
+            //        if (grid_light[i, j] >= 0)
+            //        {
+            //            int neighbours = 0;
+            //            int neighbourVals = 0;
+            //            int neighbourhood = 1;
+            //            for (int di = -neighbourhood; di <= neighbourhood; di++)
+            //            {
+            //                for (int dj = -neighbourhood; dj <= neighbourhood; dj++)
+            //                {
+            //                    int ni = i + di, nj = j + dj;
+            //                    if (ni >= 0 && ni < width &&
+            //                        nj >= 0 && nj < height)
+            //                    {
+            //                        neighbours++;
+            //                        neighbourVals += grid_light[ni, nj];
+            //                    }
+            //                }
+            //            }
+            //            grid_light_diff[i, j] = neighbourVals / neighbours;
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
             for (int i = 0; i < width; i++)
             {

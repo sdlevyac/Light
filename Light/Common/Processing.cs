@@ -63,6 +63,10 @@ namespace Light
             Vector2 startPos = new Vector2(pos.X, pos.Y);
             bool hit = false;
             int dim = 0;
+            if (Math.Abs(dir.X) < Math.Abs(dir.Y))
+            {
+                dim = 1;
+            }
             int length = 0;
             while (!hit)
             {
